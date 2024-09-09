@@ -1,4 +1,4 @@
-fn calculate_polish_notation(expression: &String) -> f32 {
+fn calculate_reverse_polish_notation(expression: &str) -> f32 {
     let mut stack: Vec<f32> = Vec::new();
     let mut is_negative = false;
     let mut number = 0f32;
@@ -30,7 +30,7 @@ fn calculate_polish_notation(expression: &String) -> f32 {
             let num2 = stack.pop().unwrap();
             let result = calculate_operations(num2, num1, expression.as_bytes()[i] as char);
             match result {
-                None => panic!("m"),
+                None => panic!("Тебе кто на нуль разрешил делить?"),
                 _ => stack.push(result.unwrap()),
             }
         }
@@ -60,7 +60,16 @@ mod tests {
 
     #[test]
     fn cpn() {
-        assert_eq!(calculate_polish_notation(&String::from("5 4 +")), 9.0);
-        assert_eq!(calculate_polish_notation(&String::from("5 3 -")), 2.0);
+        assert_eq!(calculate_reverse_polish_notation(&"5 4 +"), 9.0);
+        assert_eq!(calculate_reverse_polish_notation(&"5 3 -"), 2.0);
+        assert_eq!(calculate_reverse_polish_notation(&"2 4 3 * -"), -10.0);
+        assert_eq!(calculate_reverse_polish_notation(&"-5 4 +"), -1.0);
+        assert_eq!(calculate_reverse_polish_notation(&"5 -4 +"), 1.0);
+    }
+
+    #[test]
+    #[should_panic]
+    fn zero_division() {
+        calculate_reverse_polish_notation(&"5 0 /");
     }
 }
